@@ -5,18 +5,18 @@
     "description": "Test-When a new email arrives -> Send an email",
     "author": {
       "displayName": "Microsoft Flow Community",
-      "source": "test"
+      "source": "Community"
     },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
         "$connections": {
-          "defaultValue": { },
+          "defaultValue": {},
           "type": "Object"
         },
         "$authentication": {
-          "defaultValue": { },
+          "defaultValue": {},
           "type": "SecureObject"
         }
       },
@@ -27,18 +27,25 @@
             "frequency": "Minute"
           },
           "splitOn": "@triggerBody()?['value']",
-          "metadata": { "flowSystemMetadata": { "swaggerOperationId": "OnNewEmail" } },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "OnNewEmail"
+            }
+          },
           "type": "ApiConnection",
           "inputs": {
-            "host": { "connection": { "name": "@parameters('$connections')['shared_office365']['connectionId']" } },
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_office365']['connectionId']"
+              }
+            },
             "method": "get",
             "path": "/Mail/OnNewEmail",
             "queries": {
               "folderPath": "Inbox",
-              "to": "ridip.deuri@maiolabs.com",
-              "cc": "ridip.deuri@maiolabs.com",
-              "toOrCc": "ridip.deuri@maiolabs.com",
-              "from": "ridip.deuri@maiolabs.com",
+              "to": "",
+              "cc": "",
+              "from": "",
               "importance": "Any",
               "fetchOnlyWithAttachment": false,
               "includeAttachments": false
@@ -49,40 +56,60 @@
       },
       "actions": {
         "Send_an_email": {
-          "runAfter": { },
-          "metadata": { "flowSystemMetadata": { "swaggerOperationId": "SendEmail" } },
+          "runAfter": {},
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "SendEmail"
+            }
+          },
           "type": "ApiConnection",
           "inputs": {
-            "host": { "connection": { "name": "@parameters('$connections')['shared_office365']['connectionId']" } },
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_office365']['connectionId']"
+              }
+            },
             "method": "post",
             "body": {
-              "To": "ridip.deuri@maiolabs.com",
+              "To": "",
               "Subject": "Test",
               "Body": "Test",
               "From": "@triggerBody()['Test1']",
-              "Cc": "ridip.deuri@maiolabs.com",
-              "Bcc": "ridip.deuri@maiolabs.com;"
+              "Cc": "",
+              "Bcc": ""
             },
             "path": "/Mail/OnNewEmail",
             "authentication": "@parameters('$authentication')"
           }
         },
         "Send_email": {
-          "runAfter": { "Send_an_email": [ "Succeeded" ] },
-          "metadata": { "flowSystemMetadata": { "swaggerOperationId": "SendEmail" } },
+          "runAfter": {
+            "Send_an_email": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "SendEmail"
+            }
+          },
           "type": "ApiConnection",
           "inputs": {
             "host": {
-              "api": { "runtimeUrl": "https://flow-apim-msmanaged-na-centralus-01.azure-apim.net/apim/gmail" },
-              "connection": { "name": "@parameters('$connections')['shared_gmail']['connectionId']" }
+              "api": {
+                "runtimeUrl": "https://flow-apim-msmanaged-na-centralus-01.azure-apim.net/apim/gmail"
+              },
+              "connection": {
+                "name": "@parameters('$connections')['shared_gmail']['connectionId']"
+              }
             },
             "method": "post",
             "body": {
-              "To": "ridip.deuri@maiolabs.com",
+              "To": "",
               "Subject": "AA",
               "Body": "AA",
-              "Cc": "ridip.deuri@maiolabs.com",
-              "Bcc": "ridip.deuri@maiolabs.com",
+              "Cc": "",
+              "Bcc": "",
               "IsHtml": true
             },
             "path": "/Mail/OnNewEmail",
@@ -90,21 +117,29 @@
           }
         }
       },
-      "outputs": { },
-      "description": "THis is a test"
+      "outputs": {}
     },
     "connectionReferences": {
       "shared_office365": {
-        "api": { "id": "/providers/Microsoft.PowerApps/apis/shared_office365" },
+        "api": {
+          "id": "/providers/Microsoft.PowerApps/apis/shared_office365"
+        },
         "source": "NotSpecified",
         "connectionNamingMode": "NotSpecified"
       },
       "shared_gmail": {
-        "api": { "id": "/providers/Microsoft.PowerApps/apis/shared_gmail" },
+        "api": {
+          "id": "/providers/Microsoft.PowerApps/apis/shared_gmail"
+        },
         "source": "NotSpecified",
         "connectionNamingMode": "NotSpecified"
       }
     },
-    "categoryNames": [ "productivity"]
+    "categoryNames": [
+      "productivity",
+      "email",
+      "productivity",
+      "productivity"
+    ]
   }
 }
