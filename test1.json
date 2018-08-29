@@ -1,13 +1,22 @@
 {
-  "properties": {
+  "properties": {   
     "displayName": "When a new email arrives , Send an email",
     "summary": "Test-When a new email arrives , Send an email",
     "description": "Test-When a new email arrives , Send an email",
     "author": {
-      "displayName": "Microsoft Flow Community",
-      "source": "Community"
+     
     },
     "definition": {
+      "metadata": {
+        "creator": {
+          "id": "be846b50-60ae-4984-a287-accdcfcd8543",
+          "type": "User",
+          "tenantId": "26a96d9a-19f8-4fcf-b44f-f273fbeb67bc"
+        },
+        "provisioningMethod": "FromDefinition",
+        "failureAlertSubscription": true,
+        "clientLastModifiedTime": "2018-08-08T07:02:52.7008816Z"
+      },
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
@@ -43,9 +52,10 @@
             "path": "/Mail/OnNewEmail",
             "queries": {
               "folderPath": "Inbox",
-              "to": "",
-              "cc": "",
-              "from": "",
+              "to": "ridip.deuri@maiolabs.com",
+              "cc": "ridip.deuri@maiolabs.com",
+              "toOrCc": "ridip.deuri@maiolabs.com",
+              "from": "ridip.deuri@maiolabs.com",
               "importance": "Any",
               "fetchOnlyWithAttachment": false,
               "includeAttachments": false
@@ -56,7 +66,7 @@
       },
       "actions": {
         "Send_an_email": {
-          "runAfter": {},
+          "runAfter": { },
           "metadata": {
             "flowSystemMetadata": {
               "swaggerOperationId": "SendEmail"
@@ -71,45 +81,33 @@
             },
             "method": "post",
             "body": {
-              "To": "",
+              "To": "ridip.deuri@maiolabs.com",
               "Subject": "Test",
               "Body": "Test",
               "From": "@triggerBody()['Test1']",
-              "Cc": "",
-              "Bcc": ""
+              "Cc": "ridip.deuri@maiolabs.com",
+              "Bcc": "ridip.deuri@maiolabs.com;"
             },
             "path": "/Mail/OnNewEmail",
             "authentication": "@parameters('$authentication')"
           }
         },
         "Send_email": {
-          "runAfter": {
-            "Send_an_email": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "flowSystemMetadata": {
-              "swaggerOperationId": "SendEmail"
-            }
-          },
+          "runAfter": { "Send_an_email": [ "Succeeded" ] },
+          "metadata": { "flowSystemMetadata": { "swaggerOperationId": "SendEmail" } },
           "type": "ApiConnection",
           "inputs": {
             "host": {
-              "api": {
-                "runtimeUrl": "https://flow-apim-msmanaged-na-centralus-01.azure-apim.net/apim/gmail"
-              },
-              "connection": {
-                "name": "@parameters('$connections')['shared_gmail']['connectionId']"
-              }
+              "api": { "runtimeUrl": "https://flow-apim-msmanaged-na-centralus-01.azure-apim.net/apim/gmail" },
+              "connection": { "name": "@parameters('$connections')['shared_gmail']['connectionId']" }
             },
             "method": "post",
             "body": {
-              "To": "",
+              "To": "ridip.deuri@maiolabs.com",
               "Subject": "AA",
               "Body": "AA",
-              "Cc": "",
-              "Bcc": "",
+              "Cc": "ridip.deuri@maiolabs.com",
+              "Bcc": "ridip.deuri@maiolabs.com",
               "IsHtml": true
             },
             "path": "/Mail/OnNewEmail",
@@ -117,7 +115,8 @@
           }
         }
       },
-      "outputs": {}
+      "outputs": { },
+      "description": "THis is a test"
     },
     "connectionReferences": {
       "shared_office365": {
@@ -134,11 +133,6 @@
         "source": "NotSpecified",
         "connectionNamingMode": "NotSpecified"
       }
-    },
-    "categoryNames": [
-      "productivity",
-      "email",
-      "productivity"
-    ]
+    }
   }
 }
