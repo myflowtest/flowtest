@@ -5,7 +5,7 @@
     "description": "Test-When a new email arrives -> Send an email",
     "author": {
       "displayName": "Microsoft Flow Community",
-      "source": "Community"
+      "source": "test"
     },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
@@ -90,7 +90,8 @@
           }
         }
       },
-      "outputs": { }
+      "outputs": { },
+      "description": "THis is a test"
     },
     "connectionReferences": {
       "shared_office365": {
@@ -104,6 +105,6 @@
         "connectionNamingMode": "NotSpecified"
       }
     },
-    "categoryNames": [ "productivity", "email", "productivity" ]
+    "categoryNames": [ "productivity"]
   }
 }
