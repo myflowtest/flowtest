@@ -40,7 +40,7 @@
               }
             },
             "method": "get",
-            "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://d60cdev01.sharepoint.com/sites/SC80014T00511'))}/tables/@{encodeURIComponent(encodeURIComponent('40c0375b-754d-4d64-8c29-f982a8876454'))}/items",
+            "path": "",
             "queries": {
               "folderPath": "Inbox",
               "to": "",
