@@ -40,7 +40,7 @@
               }
             },
             "method": "get",
-            "path": "",
+            "path": "/datasets/@''/tables//items",
             "queries": {
               "folderPath": "Inbox",
               "to": "",
