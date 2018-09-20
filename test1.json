@@ -1,12 +1,8 @@
 {
   "properties": {
-    "displayName": "When a new email arrives , Send an email",
-    "summary": "Test-When a new email arrives , Send an email",
-    "description": "Test-When a new email arrives , Send an email",
-    "author": {
-      "displayName": "Microsoft Flow Community",
-      "source": "Community"
-    },
+    "displayName": "Forward all Gmail emails to another email address",
+    "summary": "When a new Gmail mail arrives, this flow will automatically forward it to another specified Gmail account along with the attachments.",
+    "description": "When a new Gmail mail arrives, this flow will automatically forward it to another specified Gmail account along with the attachments.",
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
@@ -23,31 +19,27 @@
       "triggers": {
         "When_a_new_email_arrives": {
           "recurrence": {
-            "interval": 1,
+            "interval": 15,
             "frequency": "Minute"
-          },
-          "splitOn": "@triggerBody()?['value']",
-          "metadata": {
-            "flowSystemMetadata": {
-              "swaggerOperationId": "OnNewEmail"
-            }
           },
           "type": "ApiConnection",
           "inputs": {
             "host": {
+              "api": {
+                "runtimeUrl": "https://msmanaged-na.azure-apim.net/apim/gmail"
+              },
               "connection": {
-                "name": "@parameters('$connections')['shared_office365']['connectionId']"
+                "name": "@parameters('$connections')['shared_gmail']['connectionId']"
               }
             },
             "method": "get",
-            "path": "/datasets/@''/tables//items",
+            "path": "/Mail/OnNewEmail",
             "queries": {
-              "folderPath": "Inbox",
-              "to": "",
-              "cc": "",
-              "from": "",
-              "importance": "Any",
-              "fetchOnlyWithAttachment": false,
+              "label": "",
+              "from": "ridip.test@gmail.com",
+              "importance": "All",
+              "starred": "All",
+              "fetchOnlyWithAttachments": false,
               "includeAttachments": false
             },
             "authentication": "@parameters('$authentication')"
@@ -55,64 +47,27 @@
         }
       },
       "actions": {
-        "Send_an_email": {
-          "runAfter": {},
-          "metadata": {
-            "flowSystemMetadata": {
-              "swaggerOperationId": "SendEmail"
-            }
-          },
-          "type": "ApiConnection",
-          "inputs": {
-            "host": {
-              "connection": {
-                "name": "@parameters('$connections')['shared_office365']['connectionId']"
-              }
-            },
-            "method": "post",
-            "body": {
-              "To": "",
-              "Subject": "Test",
-              "Body": "Test",
-              "From": "@triggerBody()['Test1']",
-              "Cc": "",
-              "Bcc": ""
-            },
-            "path": "/Mail/OnNewEmail",
-            "authentication": "@parameters('$authentication')"
-          }
-        },
         "Send_email": {
-          "runAfter": {
-            "Send_an_email": [
-              "Succeeded"
-            ]
-          },
-          "metadata": {
-            "flowSystemMetadata": {
-              "swaggerOperationId": "SendEmail"
-            }
-          },
+          "runAfter": {},
           "type": "ApiConnection",
           "inputs": {
             "host": {
               "api": {
-                "runtimeUrl": "https://flow-apim-msmanaged-na-centralus-01.azure-apim.net/apim/gmail"
+                "runtimeUrl": "https://msmanaged-na.azure-apim.net/apim/gmail"
               },
               "connection": {
                 "name": "@parameters('$connections')['shared_gmail']['connectionId']"
               }
             },
             "method": "post",
+            "path": "/Mail",
             "body": {
               "To": "",
-              "Subject": "AA",
-              "Body": "AA",
-              "Cc": "",
-              "Bcc": "",
-              "IsHtml": true
+              "Subject": "@triggerBody()?['Subject']",
+              "Body": "@{triggerBody()?['Body']}",
+              "IsHtml": "@triggerBody()?['IsHtml']",
+              "Attachments": "@triggerBody()?['Attachments']"
             },
-            "path": "/Mail/OnNewEmail",
             "authentication": "@parameters('$authentication')"
           }
         }
@@ -120,25 +75,19 @@
       "outputs": {}
     },
     "connectionReferences": {
-      "shared_office365": {
-        "api": {
-          "id": "/providers/Microsoft.PowerApps/apis/shared_office365"
-        },
-        "source": "NotSpecified",
-        "connectionNamingMode": "NotSpecified"
-      },
       "shared_gmail": {
         "api": {
           "id": "/providers/Microsoft.PowerApps/apis/shared_gmail"
-        },
-        "source": "NotSpecified",
-        "connectionNamingMode": "NotSpecified"
+        }
       }
     },
     "categoryNames": [
-      "productivity",
       "email",
       "productivity"
-    ]
+    ],
+    "author": {
+      "displayName": "Microsoft Flow Community",
+      "source": "Community"
+    }
   }
 }
