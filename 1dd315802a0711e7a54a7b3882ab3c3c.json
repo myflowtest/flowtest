@@ -62,7 +62,7 @@
             "method": "post",
             "path": "/Mail",
             "body": {
-              "To": "ridip.test@gmail.com",
+              "To": "",
               "Subject": "@triggerBody()?['Subject']",
               "Body": "@{triggerBody()?['Body']}",
               "IsHtml": "@triggerBody()?['IsHtml']",
@@ -82,7 +82,8 @@
       }
     },
     "categoryNames": [
-      "email"
+      "email",
+      "productivity"
     ],
     "author": {
       "displayName": "Microsoft Flow Community",
