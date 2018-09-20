@@ -1,0 +1,92 @@
+{
+  "properties": {
+    "displayName": "Forward all Gmail emails to another email address",
+    "summary": "When a new Gmail mail arrives, this flow will automatically forward it to another specified Gmail account along with the attachments.",
+    "description": "When a new Gmail mail arrives, this flow will automatically forward it to another specified Gmail account along with the attachments.",
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_new_email_arrives": {
+          "recurrence": {
+            "interval": 15,
+            "frequency": "Minute"
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "api": {
+                "runtimeUrl": "https://msmanaged-na.azure-apim.net/apim/gmail"
+              },
+              "connection": {
+                "name": "@parameters('$connections')['shared_gmail']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/Mail/OnNewEmail",
+            "queries": {
+              "label": "",
+              "from": "ridip.test@gmail.com",
+              "importance": "All",
+              "starred": "All",
+              "fetchOnlyWithAttachments": false,
+              "includeAttachments": false
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Send_email": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "api": {
+                "runtimeUrl": "https://msmanaged-na.azure-apim.net/apim/gmail"
+              },
+              "connection": {
+                "name": "@parameters('$connections')['shared_gmail']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/Mail",
+            "body": {
+              "To": "ridip.test@gmail.com",
+              "Subject": "@triggerBody()?['Subject']",
+              "Body": "@{triggerBody()?['Body']}",
+              "IsHtml": "@triggerBody()?['IsHtml']",
+              "Attachments": "@triggerBody()?['Attachments']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "connectionReferences": {
+      "shared_gmail": {
+        "api": {
+          "id": "/providers/Microsoft.PowerApps/apis/shared_gmail"
+        }
+      }
+    },
+    "categoryNames": [
+      "email"
+    ],
+    "author": {
+      "displayName": "Microsoft Flow Community",
+      "source": "Community"
+    }
+  }
+}
